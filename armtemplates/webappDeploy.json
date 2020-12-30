@@ -1,0 +1,91 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "webAppName": {
+        "type": "string",
+        "metadata": {
+          "description": "AppName of Spin"
+        }
+      },
+      "hostingPlan": {
+        "type": "string",
+        "minLength": 1
+      },
+      "skuName": {
+        "type": "string",
+        "defaultValue": "B1",
+        "allowedValues": [
+          "F1",
+          "B1",
+          "S1"
+        ]
+      },
+      "minimumCapacity": {
+        "type": "int",
+        "defaultValue": 2
+      },
+      "maximumCapacity": {
+        "type": "int",
+        "defaultValue": 10
+      },
+      "defaultCapacity": {
+        "type": "int",
+        "defaultValue": 2
+      }
+    },
+    "variables": {
+      "AppServiceId": "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]",
+      "AppServicePlanId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlan'))]"
+    },
+    "resources": [
+      {
+        "apiVersion": "2018-11-01",
+        "name": "[parameters('hostingPlan')]",
+        "type": "Microsoft.Web/serverfarms",
+        "location": "[resourceGroup().location]",
+        "sku": {
+          "name": "[parameters('skuName')]",
+          "capacity": "[parameters('skuCapacity')]"
+        },
+        "properties": {
+          "name": "[parameters('hostingPlan')]"
+        }
+      },
+      {
+        "apiVersion": "2018-11-01",
+        "name": "[parameters('webAppName')]",
+        "type": "Microsoft.Web/sites",
+        "location": "[resourceGroup().location]",
+        "dependsOn": [
+          "[concat('Microsoft.Web/serverfarms/', parameters('hostingPlan'))]",
+          "[concat('Microsoft.Insights/components/', parameters('webAppName'))]"
+        ],
+        "properties": {
+          "name": "[parameters('webAppName')]",
+          "serverFarmId": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlan'))]",
+          "siteConfig": {
+            "AlwaysOn": true,
+            "appSettings": [
+              {
+                "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                "value": "[reference(resourceId('Microsoft.Insights/components', parameters('webAppName')), '2015-05-01').InstrumentationKey]"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "apiVersion": "2015-05-01",
+        "name": "[parameters('webAppName')]",
+        "type": "Microsoft.Insights/components",
+        "location": "East US",
+        "dependsOn": [
+        ],
+        "properties": {
+          "applicationId": "[parameters('webAppName')]"
+        }
+      }
+    ]
+  }
+  
