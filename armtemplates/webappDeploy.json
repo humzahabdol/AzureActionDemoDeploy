@@ -46,7 +46,7 @@
         "location": "[resourceGroup().location]",
         "sku": {
           "name": "[parameters('skuName')]",
-          "capacity": "[parameters('skuCapacity')]"
+          "capacity": "[parameters('defaultCapacity')]"
         },
         "properties": {
           "name": "[parameters('hostingPlan')]"
