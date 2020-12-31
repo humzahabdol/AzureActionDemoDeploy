@@ -21,6 +21,13 @@
           "S1"
         ]
       },
+      "linuxFxVersion": {
+        "type": "string",
+        "defaultValue": "NODE|12-lts",
+        "metadata": {
+          "description": "The Runtime stack of current web app"
+        }
+      },
       "minimumCapacity": {
         "type": "int",
         "defaultValue": 2
@@ -43,13 +50,16 @@
         "apiVersion": "2018-11-01",
         "name": "[parameters('hostingPlan')]",
         "type": "Microsoft.Web/serverfarms",
+        "kind": "linux",
         "location": "[resourceGroup().location]",
         "sku": {
           "name": "[parameters('skuName')]",
           "capacity": "[parameters('defaultCapacity')]"
         },
         "properties": {
-          "name": "[parameters('hostingPlan')]"
+          "name": "[parameters('hostingPlan')]",
+          "reserved": true
+          
         }
       },
       {
@@ -66,6 +76,7 @@
           "serverFarmId": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlan'))]",
           "siteConfig": {
             "AlwaysOn": true,
+            "linuxFxVersion": "[parameters('linuxFxVersion')]",
             "appSettings": [
               {
                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",

@@ -39,6 +39,7 @@ jobs:
             --resource-group crc-test-group \
             --template-file armtemplates/webappDeploy.json \
             --parameters armtemplates/parameters.json
+            
       - name: 'Deploy to Azure WebApp'
         uses: azure/webapps-deploy@v2
         with: 
