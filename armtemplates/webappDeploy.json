@@ -63,7 +63,7 @@
         "type": "Microsoft.Web/sites",
         "apiVersion": "2020-06-01",
         "name": "[parameters('webAppName')]",
-        "location": "[parameters('location')]",
+        "location": "[resourceGroup().location]",
         "kind": "app",
         "dependsOn": [
           "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlan'))]"
