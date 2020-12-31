@@ -47,35 +47,30 @@
     },
     "resources": [
       {
-        "apiVersion": "2018-11-01",
-        "name": "[parameters('hostingPlan')]",
         "type": "Microsoft.Web/serverfarms",
-        "kind": "linux",
+        "apiVersion": "2020-06-01",
+        "name": "[parameters('hostingPlan')]",
         "location": "[resourceGroup().location]",
         "sku": {
-          "name": "[parameters('skuName')]",
-          "capacity": "[parameters('defaultCapacity')]"
+          "name": "[parameters('skuName')]"
         },
+        "kind": "linux",
         "properties": {
-          "name": "[parameters('hostingPlan')]",
           "reserved": true
-          
         }
       },
       {
-        "apiVersion": "2018-11-01",
-        "name": "[parameters('webAppName')]",
         "type": "Microsoft.Web/sites",
-        "location": "[resourceGroup().location]",
+        "apiVersion": "2020-06-01",
+        "name": "[parameters('webAppName')]",
+        "location": "[parameters('location')]",
+        "kind": "app",
         "dependsOn": [
-          "[concat('Microsoft.Web/serverfarms/', parameters('hostingPlan'))]",
-          "[concat('Microsoft.Insights/components/', parameters('webAppName'))]"
+          "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlan'))]"
         ],
         "properties": {
-          "name": "[parameters('webAppName')]",
-          "serverFarmId": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlan'))]",
+          "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlan'))]",
           "siteConfig": {
-            "AlwaysOn": true,
             "linuxFxVersion": "[parameters('linuxFxVersion')]",
             "appSettings": [
               {
