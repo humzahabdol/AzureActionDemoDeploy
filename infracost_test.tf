@@ -42,41 +42,6 @@ resource "azurerm_linux_virtual_machine" "my_linux_vm" {
   }
 }
 
-# Provision multiple App Service Plans
-resource "azurerm_service_plan" "my_app_service" {
-  count               = var.resource_count
-  location            = "eastus"
-  name                = "test-service-plan-${count.index}"
-  resource_group_name = "test_resource_group"
-  os_type             = "Windows"
-
-  sku_name    = "P1v2"
-  worker_count = 4 # Change to 8 for comparison
-
-  tags = {
-    Environment = "Prod"
-    Service     = "web-app-service-${count.index}"
-  }
-}
-
-# Provision multiple Linux Function Apps
-resource "azurerm_linux_function_app" "my_function" {
-  count                     = var.resource_count
-  location                  = "eastus"
-  name                      = "test-function-app-${count.index}"
-  resource_group_name       = "test"
-  service_plan_id           = "/subscriptions/123/resourceGroups/testrg/providers/Microsoft.Web/serverFarms/serverFarmValue"
-  storage_account_name      = "test-storage-${count.index}"
-  storage_account_access_key = "test"
-  site_config {}
-
-  tags = {
-    Environment = "Prod"
-    Service     = "function-app-${count.index}"
-  }
-}
-
-
 # resource "azurerm_service_plan" "my_app_service" {
 #   location = "eastus"
 #   name = "test"
