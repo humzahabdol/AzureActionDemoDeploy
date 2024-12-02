@@ -40,8 +40,8 @@ module "app_plan_2" {
 
 }
 
-module "app_plan" {
-  source = "./modules/app_plan"
-  sku_name = "S3"
+# module "app_plan" {
+#   source = "./modules/app_plan"
+#   sku_name = "S3"
 
-}
+# }
