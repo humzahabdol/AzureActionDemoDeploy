@@ -8,6 +8,14 @@ dns_search_order = "humzah"
 
 # Virtual Network
 
+app_plans = {
+    security= [
+        {
+            osType                       = "Windows"
+            sku                          = "S3"
+        }
+    ]
+}
 
 servers = {
   backend = []

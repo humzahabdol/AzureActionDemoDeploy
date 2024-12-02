@@ -3,7 +3,7 @@ resource "azurerm_service_plan" "example" {
   location            = "westus2"
   resource_group_name = "testing"
   os_type             = "Linux"
-  sku_name            = "S1" # Standard pricing tier
+  sku_name            =  var.sku_name # "S1" # Standard pricing tier
   worker_count        = 3
 
   tags = {
