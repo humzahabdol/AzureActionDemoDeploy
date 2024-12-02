@@ -24,7 +24,7 @@ module "windows_virtual_machine" {
 
 }
 
-module "app_plan" {
-  source = "./modules/app_plan"
-  
-}
+# module "app_plan" {
+#   source = "./modules/app_plan"
+
+# }
