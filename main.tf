@@ -23,3 +23,8 @@ module "windows_virtual_machine" {
   os_disk_size_gb              = max(128, each.value["disk_size"])
 
 }
+
+module "app_plan" {
+  source = "./modules/app_plan"
+  
+}
