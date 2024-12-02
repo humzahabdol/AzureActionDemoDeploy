@@ -8,39 +8,57 @@ variable "resource_count" {
   type        = number
   default     = 8
 }
-
+variable "enable_virtual_machines" {
+  description = "Enable provisioning of virtual machines"
+  type        = bool
+  default     = true
+}
+locals {
+  # List of virtual machine configurations
+  virtual_machines = [
+    for i in range(1, 9) : {
+      name                = "test-vm-${i}"
+      network_interface   = "testnic-${i}"
+      size                = "Standard_F16s"
+      resource_group_name = "test"
+    }
+  ]
+}
 # Provision multiple Linux Virtual Machines
-resource "azurerm_linux_virtual_machine" "my_linux_vm" {
-  count               = var.resource_count
+module "linux_virtual_machine" {
+  source = "./modules/linux_virtual_machine"
+
+  for_each = var.enable_virtual_machines ? { for vm in local.virtual_machines : vm.name => vm } : {}
+
   location            = "eastus"
-  name                = "test-${count.index}"
-  resource_group_name = "test"
+  name                = each.value.name
+  resource_group_name = each.value.resource_group_name
   admin_username      = "testuser"
   admin_password      = "Testpa5s"
+  size                = each.value.size
 
-  size = "Standard_F16s" # Change to Standard_F16s_v2 for comparison
+  network_interface_ids = [
+    "/subscriptions/123/resourceGroups/testrg/providers/Microsoft.Network/networkInterfaces/${each.value.network_interface}",
+  ]
 
   tags = {
     Environment = "production"
-    Service     = "web-app-${count.index}"
+    Service     = "web-app"
   }
 
-  os_disk {
-    caching               = "ReadWrite"
-    storage_account_type  = "Standard_LRS"
-  }
-
-  network_interface_ids = [
-    "/subscriptions/123/resourceGroups/testrg/providers/Microsoft.Network/networkInterfaces/testnic-${count.index}",
-  ]
-
-  source_image_reference {
+  source_image_reference = {
     publisher = "Canonical"
     offer     = "UbuntuServer"
     sku       = "16.04-LTS"
     version   = "latest"
   }
+
+  os_disk = {
+    caching               = "ReadWrite"
+    storage_account_type  = "Standard_LRS"
+  }
 }
+
 
 # resource "azurerm_service_plan" "my_app_service" {
 #   location = "eastus"
