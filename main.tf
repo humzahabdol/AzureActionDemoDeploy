@@ -40,7 +40,7 @@ module "app_plan_2" {
 
 }
 
-# module "app_plan" {
-#   source = "./modules/app_plan"
+module "app_plan" {
+  source = "./modules/app_plan"
 
-# }
+}
