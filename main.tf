@@ -24,6 +24,13 @@ module "windows_virtual_machine" {
 
 }
 
+module "humzah-test" {
+  source = "./modules/linux_virtual_machine"
+
+  vm_sku          = "Standard_F2"
+
+}
+
 # module "app_plan" {
 #   source = "./modules/app_plan"
 
