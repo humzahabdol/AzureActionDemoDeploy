@@ -9,10 +9,11 @@ dns_search_order = "humzah"
 # Virtual Network
 
 app_plans = {
-    security= [
+    security = [
         {
             osType                       = "Windows"
             sku                          = "S3"
+            count                        = 1
         }
     ]
 }
