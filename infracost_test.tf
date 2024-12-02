@@ -6,7 +6,7 @@ provider "azurerm" {
 variable "resource_count" {
   description = "Number of resources to provision"
   type        = number
-  default     = 10
+  default     = 8
 }
 
 # Provision multiple Linux Virtual Machines
