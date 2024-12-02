@@ -1,3 +1,7 @@
+provider "azurerm" {
+  features {}
+}
+
 module "windows_virtual_machine" {
   source = "./modules/linux_virtual_machine"
 
