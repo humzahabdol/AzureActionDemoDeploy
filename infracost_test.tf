@@ -16,7 +16,7 @@ variable "enable_virtual_machines" {
 locals {
   # List of virtual machine configurations
   virtual_machines = [
-    for i in range(1, 9) : {
+    for i in range(1, 11) : {
       name                = "test-vm-${i}"
       network_interface   = "testnic-${i}"
       size                = "Standard_F16s"
