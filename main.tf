@@ -36,10 +36,10 @@ module "app_plan_2" {
   #  for_each = { for server in local.servers : server.server_name => server if lower(server.osType) == "windows" && server.create_first == false }
 
   for_each = { for app_plan in local.app_plans : app_plan.name => app_plan if lower(app_plan.osType) == "windows"}
-  sku_name = "S3"
+  
 
 }
 
-module "app_plan" {
-  source = "./modules/app_plan"
-}
+# module "app_plan" {
+#   source = "./modules/app_plan"
+# }
